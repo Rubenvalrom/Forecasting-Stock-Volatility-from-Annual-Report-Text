@@ -1,0 +1,2 @@
+# Forecasting Stock Volatility from Annual Report Text
+The aim of this project is to determine whether the text that companies publish about their own risks, in the annual reports they file with the US regulator (10- K filings), helps forecast how much their share price will fluctuate in the following weeks (stock volatility), beyond what established econometric models and basic company data already capture. The purpose is to give a rigorous and reproducible answer to that question, and to identify which ways of turning long documents into numerical features work best.
