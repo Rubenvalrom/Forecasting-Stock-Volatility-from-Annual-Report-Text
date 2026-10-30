@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "volatility-from-text"
+version = "0.1.0"
+description = "Forecasting stock volatility from annual report text"
+requires-python = ">=3.14.7"
+dependencies = [
+    "numpy",
+    "pandas",
+    "pyarrow",          
+    "pyyaml",           
+    "python-dotenv",    
+    "requests",
+    "yfinance",
+    "scipy",
+    "statsmodels",
+    "arch",
+    "scikit-learn",
+    "mlflow",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
