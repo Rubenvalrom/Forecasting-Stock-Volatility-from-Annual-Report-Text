@@ -7,6 +7,9 @@ mlartifacts/**
 # metadata from pip (make setup)
 *.egg-info
 
-
-# Claude Code local config
+# claude Code local config
 .claude/
+
+# residual files 
+**__pycache__/**
+.pytest_cache/**
