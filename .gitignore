@@ -3,3 +3,10 @@ data/**
 mlruns/**
 mlartifacts/**
 .env
+
+# metadata from pip (make setup)
+*.egg-info
+
+
+# Claude Code local config
+.claude/
