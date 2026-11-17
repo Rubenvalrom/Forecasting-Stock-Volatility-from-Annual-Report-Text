@@ -79,5 +79,18 @@ def ten_k_filings(
         & (filings["filingDate"] <= end)
         & (filings["form"] == "10-K")
     ]
+
+    # Rename columns to snake_case
+    filings.rename(columns={"accessionNumber": "accession_number",
+                            "filingDate": "filing_date",
+                            "reportDate": "report_date",
+                            "acceptanceDateTime": "accepted_at_utc",
+                            })
+
+    # Convert to date type
+    filings["filing_date"] = pd.to_datetime(filings["filing_date"])
+    filings["report_date"] = pd.to_datetime(filings["report_date"])
+    filings["accepted_at_utc"] = pd.to_datetime(filings["accepted_at_utc"], utc=True) # preserve utc
+
     return filings.reset_index(drop=True)
 
