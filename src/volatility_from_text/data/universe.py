@@ -1,9 +1,6 @@
 import pandas as pd
 import numpy as np
 
-# 1 row per company, describes the company
-UNIVERSE_COLS = ["cik", "ticker", "company", "sector", "sic", "sic_description", "fiscal_year_end"]
-
 def add_ciks(candidates, tickers_json):
     """
     Attach the SEC CIK and company name to each candidate ticker.
@@ -143,3 +140,21 @@ def select_per_sector(df, seed, n_sample=10, sector_col="sector", ticker_col="ti
 
     return df
 
+# 1 row per company, describes the company
+UNIVERSE_COLS = ["cik", "ticker", "company", "sector", "sic", "sic_description", "fiscal_year_end"]
+
+def universe_table(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Return one row per company with the `UNIVERSE_COLS` columns.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Filings, one row per report (first row per CIK is kept).
+
+    Returns
+    -------
+    pandas.DataFrame
+        Universe table, one row per company.
+    """
+    return df[UNIVERSE_COLS].drop_duplicates("cik").reset_index(drop=True)
