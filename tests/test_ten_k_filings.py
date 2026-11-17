@@ -20,4 +20,4 @@ def test_ten_k_filings_keeps_only_10k_in_range() -> None:
         end="2019-12-31",
     )
 
-    assert list(out["accessionNumber"]) == ["0000000001-15-000001"]
+    assert list(out["accession_number"]) == ["0000000001-15-000001"]

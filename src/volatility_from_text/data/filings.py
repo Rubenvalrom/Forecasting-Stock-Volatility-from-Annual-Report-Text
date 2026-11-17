@@ -81,7 +81,7 @@ def ten_k_filings(
     ]
 
     # Rename columns to snake_case
-    filings.rename(columns={"accessionNumber": "accession_number",
+    filings = filings.rename(columns={"accessionNumber": "accession_number",
                             "filingDate": "filing_date",
                             "reportDate": "report_date",
                             "acceptanceDateTime": "accepted_at_utc",
