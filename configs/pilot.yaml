@@ -1,0 +1,18 @@
+# Pilot: 30 companies, three sectors, 2010-2019
+
+start: "2010-01-01"
+end: "2019-12-31"
+prices_start: "2009-01-01" # one extra year for the past-volatility features
+prices_end: "2020-02-29"   # room for the 21-day target of the last filings
+
+market_ticker: SPY  # SP500 index fund to determine if the market is or not closed
+horizons: [21]
+
+selection:
+  per_sector: 10
+  seed: 27
+
+candidates: # List provided by a LLM
+  Technology: [AAPL, MSFT, INTC, CSCO, ORCL, IBM, QCOM, TXN, ADBE, NVDA, AMD, HPQ, MU, AMAT, ADI]
+  Financials: [JPM, BAC, WFC, C, GS, MS, USB, PNC, AXP, BNY, STT, COF, MET, PRU, TRV]
+  Utilities:  [DUK, SO, NEE, D, AEP, EXC, XEL, ED, PEG, WEC, ES, DTE, ETR, PPL, FE]

@@ -13,3 +13,7 @@ mlartifacts/**
 # residual files 
 **__pycache__/**
 .pytest_cache/**
+*.pyc
+
+# WSL residual files
+**Zone.Identifier
