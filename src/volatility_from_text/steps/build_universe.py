@@ -47,7 +47,8 @@ def main(config_path):
     # Filter companies that do not have exactly 1 report each year
     start_year = pd.to_datetime(START).year
     end_year =   pd.to_datetime(END).year
-    years = range( start_year, end_year + 1) # range(n, m) goes from n to m-1
+
+    years = range(start_year, end_year + 1) # range(n, m) goes from n to m-1
 
     filings, dropped = one_report_per_year(df =                 filings, 
                                            cik_column =         "cik", 
@@ -90,18 +91,20 @@ def main(config_path):
     
     universe = universe_table(survivors)
 
+    # Save the remaining companies
     SILVER.mkdir(parents=True, exist_ok=True)
-
     universe.to_parquet(SILVER / "universe.parquet", index=False)
 
-    # Save the discarded companies
+    # Save the discarded companies by an error
     discards = pd.DataFrame(discards)
     discards.to_csv(SILVER / "universe_discards.csv", index=False)
 
+    # Final message with the number of companies kept and defective
     print(f"{len(universe)} companies -> {SILVER / 'universe.parquet'} ({len(discards)} discarded)")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    # Config argument to pick between pilot and full project
     parser.add_argument("--config", default="configs/pilot.yaml")
     main(parser.parse_args().config)
