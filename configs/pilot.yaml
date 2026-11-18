@@ -2,8 +2,8 @@
 
 start: "2010-01-01"
 end: "2019-12-31"
-prices_start: "2009-01-01" # one extra year for the past-volatility features
-prices_end: "2020-02-29"   # room for the 21-day target of the last filings
+start_prices: "2009-01-01" # one extra year for the past-volatility features
+end_prices: "2020-02-29"   # room for the 21-day target of the last filings
 
 market_ticker: SPY  # SP500 index fund to determine if the market is or not closed
 horizons: [21]

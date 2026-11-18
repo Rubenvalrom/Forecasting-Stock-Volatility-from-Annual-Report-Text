@@ -63,17 +63,21 @@ def main(config_path):
 
     # Get NY sessions (sp500 index fund)
     ROUTE_PRICES = BRONZE / "prices"
+    
+    START_PRICES = config["start_prices"]
+    END_PRICES = config["end_prices"]
+
     sessions = get_prices(ticker = config["market_ticker"], 
-                          start =  START, 
-                          end =    END,
+                          start =  START_PRICES, 
+                          end =    END_PRICES,
                           route =  ROUTE_PRICES).index # prices gives the entire dataset, only the dates are needed
 
     for ticker in filings["ticker"].unique(): # Tickers are repeated each year, just use it once
 
         # Import prices form yfinance or data/bronze/prices/ticker.parquet 
         df_ticker = get_prices(ticker = ticker, 
-                               start=   START, 
-                               end =    END,
+                               start=   START_PRICES, 
+                               end =    END_PRICES,
                                route =  ROUTE_PRICES) 
 
         # If the ticker has sessions missing or extra compared to `sessions` it is removed
