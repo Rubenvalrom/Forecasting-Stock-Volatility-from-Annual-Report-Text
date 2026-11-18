@@ -52,7 +52,7 @@ def get_prices(
     ticker: str,
     start: pd.Timestamp,
     end: pd.Timestamp,
-    route_prices: Path,
+    route: Path,
 ) -> pd.DataFrame:
     """
     Load adjusted daily prices from the parquet cache or download them from yfinance.
@@ -65,7 +65,7 @@ def get_prices(
         First date downloaded.
     end : pandas.Timestamp
         End date of the download (exclusive).
-    route_prices : pathlib.Path
+    route : pathlib.Path
         Folder of the parquet cache.
 
     Returns
@@ -74,7 +74,7 @@ def get_prices(
         Daily OHLCV prices indexed by date.
     """
 
-    path = route_prices / f"{ticker}.parquet"
+    path = route / f"{ticker}.parquet"
     path.parent.mkdir(parents=True, exist_ok=True)
     
     if (path.exists()):

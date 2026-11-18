@@ -49,7 +49,7 @@ def add_ciks(candidates, tickers_json):
     return df
 
 
-def one_report_per_year(df: pd.DataFrame, cik_col: str, filing_date_col: str, years: range) -> tuple[pd.DataFrame, pd.Index]:
+def one_report_per_year(df: pd.DataFrame, cik_column: str, filing_date_column: str, years: range) -> tuple[pd.DataFrame, pd.Index]:
     """
     Keep only the companies with exactly one filing in every year of ``years``.
 
@@ -61,9 +61,9 @@ def one_report_per_year(df: pd.DataFrame, cik_col: str, filing_date_col: str, ye
     ----------
     df : pandas.DataFrame
         Filings, one row per report.
-    cik_col : str
+    cik_column : str
         Name of the company identifier column.
-    filing_date_col : str
+    filing_date_column : str
         Name of the filing date column (datetime dtype).
     years : range
         Years in which each company must have exactly one filing.
@@ -77,10 +77,10 @@ def one_report_per_year(df: pd.DataFrame, cik_col: str, filing_date_col: str, ye
         Identifiers of the companies dropped.
     """
     # One 10-K per company and year: build the company x year table
-    filing_year = df[filing_date_col].dt.year
+    filing_year = df[filing_date_column].dt.year
 
     # Number of filings per (company, year) pair, as a Series with a 2-level index
-    counts = df.groupby([cik_col, filing_year]).size()
+    counts = df.groupby([cik_column, filing_year]).size()
 
     # Move the year level to columns: one row per company, one column per year
     table = counts.unstack(fill_value=0) # fill value of 0 prevents NaN to give false positives
@@ -93,11 +93,11 @@ def one_report_per_year(df: pd.DataFrame, cik_col: str, filing_date_col: str, ye
 
     # Report and drop the rest
     dropped = table.index.difference(complete)
-    df = df[df[cik_col].isin(complete)]
+    df = df[df[cik_column].isin(complete)]
 
     return df, dropped
 
-def select_per_sector(df, seed, n_sample=10, sector_col="sector", ticker_col="ticker"):
+def select_per_sector(df, seed, n_sample = 0, sector_column="sector", ticker_column="ticker"):
     """
     Randomly pick 10 companies per sector (pilot universe).
 
@@ -107,11 +107,11 @@ def select_per_sector(df, seed, n_sample=10, sector_col="sector", ticker_col="ti
         Companies, one row per ticker.
     seed : int
         Seed for NumPy's global random state, for reproducibility.
-    n_sample: int, default 10
+    n_sample: int, default 0
         Sample size for each Sector
-    sector_col : str, default "sector"
+    sector_column : str, default "sector"
         Name of the sector column.
-    ticker_col : str, default "ticker"
+    ticker_column : str, default "ticker"
         Name of the ticker column.
 
     Returns
@@ -125,18 +125,23 @@ def select_per_sector(df, seed, n_sample=10, sector_col="sector", ticker_col="ti
         If a sector has fewer than ``n_sample`` companies.
 
     """
+
+    # If no sample size is specified skip the function
+    if n_sample == 0 :
+        return df
+    
     # Seed for reproducibility
     rng = np.random.RandomState(seed) 
 
-    companies = df.drop_duplicates(ticker_col)  # sample companies, not filings
-    sectors = companies[sector_col].unique()
+    companies = df.drop_duplicates(ticker_column)  # sample companies, not filings
+    sectors = companies[sector_column].unique()
     chosen = []
 
     for sector in sectors:
-        in_sector = companies.loc[companies[sector_col] == sector, ticker_col]
+        in_sector = companies.loc[companies[sector_column] == sector, ticker_column]
         chosen += list(in_sector.sample(n=n_sample, random_state=rng))
 
-    df = df[df[ticker_col].isin(chosen)]
+    df = df[df[ticker_column].isin(chosen)]
 
     return df
 
