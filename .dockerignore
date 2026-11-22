@@ -1,0 +1,14 @@
+data/
+mlruns/
+mlartifacts/
+.git/
+.env
+notebooks/
+docs/
+tests/
+*.egg-info/
+.claude/
+**__pycache__/**
+.pytest_cache/**
+*.pyc
+**Zone.Identifier
