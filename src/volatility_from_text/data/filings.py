@@ -94,3 +94,23 @@ def ten_k_filings(
 
     return filings.reset_index(drop=True)
 
+# One row per 10-K: describes the filing, with the company key
+FILINGS_COLS = ["cik", "accession_number", "form", "filing_date", "report_date",
+                "accepted_at_utc", "first_tradable_date"]
+
+
+def filings_table(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Return one row per filing with the `FILINGS_COLS` columns.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Filings with `first_tradable_date` already computed.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Filings table, one row per 10-K.
+    """
+    return df[FILINGS_COLS].reset_index(drop=True)
