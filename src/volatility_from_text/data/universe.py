@@ -99,16 +99,17 @@ def one_report_per_year(df: pd.DataFrame, cik_column: str, filing_date_column: s
 
 def select_per_sector(df, seed, n_sample = 0, sector_column="sector", ticker_column="ticker"):
     """
-    Randomly pick 10 companies per sector (pilot universe).
+    Randomly pick ``n_sample`` companies from each sector, keeping all their rows.
 
     Parameters
     ----------
     df : pandas.DataFrame
-        Companies, one row per ticker.
+        Filings; a company (ticker) may span several rows.
     seed : int
-        Seed for NumPy's global random state, for reproducibility.
-    n_sample: int, default 0
-        Sample size for each Sector
+        Seed of the local random generator, for reproducibility. NumPy's
+        global random state is not touched.
+    n_sample : int, default 0
+        Number of companies to pick per sector. ``0`` disables the sampling.
     sector_column : str, default "sector"
         Name of the sector column.
     ticker_column : str, default "ticker"
@@ -117,13 +118,13 @@ def select_per_sector(df, seed, n_sample = 0, sector_column="sector", ticker_col
     Returns
     -------
     pandas.DataFrame
-        Rows of ``df`` belonging to the selected tickers.
+        Rows of ``df`` belonging to the selected tickers, or ``df`` itself
+        if ``n_sample`` is 0.
 
     Raises
     ------
     ValueError
         If a sector has fewer than ``n_sample`` companies.
-
     """
 
     # If no sample size is specified skip the function

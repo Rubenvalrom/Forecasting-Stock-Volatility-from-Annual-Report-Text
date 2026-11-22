@@ -1,4 +1,3 @@
-"""Step 1: candidates -> CIK -> filters -> silver/universe.parquet."""
 import argparse
 from pathlib import Path
 
@@ -29,11 +28,11 @@ def main(config_path):
                           tickers_json = tickers_json)
 
     # Beginning and conclusion of the reports' period
-    START = config["start"]
-    END   = config["end"]
+    start = config["start"]
+    end   = config["end"]
 
     # Seed for reproducibility
-    SEED = config["selection"]["seed"]
+    seed = config["selection"]["seed"]
 
     # Their 10-K filings
     filings = ten_k_filings(ciks =      candidates["cik"], 
@@ -41,12 +40,12 @@ def main(config_path):
                             tickers =   candidates["ticker"],
                             sectors =   candidates["sector"], 
                             route =     BRONZE, 
-                            start =     START, 
-                            end =       END)
+                            start =     start, 
+                            end =       end)
    
     # Filter companies that do not have exactly 1 report each year
-    start_year = pd.to_datetime(START).year
-    end_year =   pd.to_datetime(END).year
+    start_year = pd.to_datetime(start).year
+    end_year =   pd.to_datetime(end).year
 
     years = range(start_year, end_year + 1) # range(n, m) goes from n to m-1
 
@@ -62,23 +61,23 @@ def main(config_path):
 
 
     # Get NY sessions (sp500 index fund)
-    ROUTE_PRICES = BRONZE / "prices"
+    route_prices = BRONZE / "prices"
     
-    START_PRICES = config["start_prices"]
-    END_PRICES = config["end_prices"]
+    start_prices = config["start_prices"]
+    end_prices = config["end_prices"]
 
     sessions = get_prices(ticker = config["market_ticker"], 
-                          start =  START_PRICES, 
-                          end =    END_PRICES,
-                          route =  ROUTE_PRICES).index # prices gives the entire dataset, only the dates are needed
+                          start =  start_prices, 
+                          end =    end_prices,
+                          route =  route_prices).index # prices gives the entire dataset, only the dates are needed
 
     for ticker in filings["ticker"].unique(): # Tickers are repeated each year, just use it once
 
         # Import prices form yfinance or data/bronze/prices/ticker.parquet 
         df_ticker = get_prices(ticker = ticker, 
-                               start=   START_PRICES, 
-                               end =    END_PRICES,
-                               route =  ROUTE_PRICES) 
+                               start=   start_prices, 
+                               end =    end_prices,
+                               route =  route_prices) 
 
         # If the ticker has sessions missing or extra compared to `sessions` it is removed
         if not (check_session(df = df_ticker, sessions = sessions)): 
@@ -91,7 +90,7 @@ def main(config_path):
     # Eliminate n per sector and save
     survivors = select_per_sector(df =       filings, 
                                   n_sample = config["selection"]["per_sector"], 
-                                  seed =     SEED)
+                                  seed =     seed)
     
     universe = universe_table(survivors)
 
