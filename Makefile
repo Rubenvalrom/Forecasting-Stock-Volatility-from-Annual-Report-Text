@@ -1,4 +1,6 @@
-.PHONY: setup test all
+CONFIG ?= configs/pilot.yaml
+
+.PHONY: setup test data all
 
 setup:
 	pip install -e ".[dev]"

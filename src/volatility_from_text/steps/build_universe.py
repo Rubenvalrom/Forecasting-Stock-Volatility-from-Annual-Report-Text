@@ -18,7 +18,7 @@ TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
 
 def main(config_path):
     config = yaml.safe_load(Path(config_path).read_text())
-    discards = {"ticker": [], "reason":[]}                                   
+    discards = {"cik": [], "reason":[]}                                   
 
     # Candidates with their CIK
     tickers_json = get_json(url = TICKERS_URL, 
@@ -55,8 +55,8 @@ def main(config_path):
                                            years =              years)
 
     # Add the dropped ones to discards
-    for ticker_dropped in dropped:
-        discards["ticker"].append(ticker_dropped)
+    for cik_dropped in dropped:
+        discards["cik"].append(cik_dropped)
         discards["reason"].append("one_report_per_year")
 
 
@@ -80,11 +80,15 @@ def main(config_path):
                                route =  route_prices) 
 
         # If the ticker has sessions missing or extra compared to `sessions` it is removed
-        if not (check_session(df = df_ticker, sessions = sessions)): 
+        if not (check_session(df = df_ticker, sessions = sessions)):
+            # discarded cik
+            discarded_cik = filings[filings["ticker"] != ticker]["cik"].unique()
+            
+            # filter 
             filings = filings[filings["ticker"] != ticker]
 
-            # Add the discarded ticker
-            discards["ticker"].append(ticker) 
+            # Add the discarded cik
+            discards["cik"].append(discarded_cik) 
             discards["reason"].append("check_session")
     
     # Eliminate n per sector and save
